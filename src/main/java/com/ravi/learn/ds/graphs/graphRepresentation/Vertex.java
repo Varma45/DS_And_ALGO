@@ -1,9 +1,14 @@
 package com.ravi.learn.ds.graphs.graphRepresentation;
 
-public class Vertex {
+public class Vertex implements Comparable<Vertex> {
     private String name;
     private float distanceFromSource;
     private Vertex pathVia;
+
+    public void setVisited(boolean visited) {
+        isVisited = visited;
+    }
+
     private boolean isVisited;
 
     public Vertex(String name) {
@@ -37,5 +42,13 @@ public class Vertex {
 
     public void setPathVia(Vertex pathVia) {
         this.pathVia = pathVia;
+    }
+
+    @Override
+    public int compareTo(Vertex otherVertex) {
+        float diff = this.distanceFromSource - otherVertex.getDistanceFromSource();
+        if (diff<0) return -1;
+        if (diff>0) return 1;
+        return 0;
     }
 }

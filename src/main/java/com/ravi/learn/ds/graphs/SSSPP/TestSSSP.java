@@ -46,5 +46,27 @@ public class TestSSSP {
         testMyGraph.bfs();
         testMyGraph.sssp();
 
+        //Weighted Test For Dijkastras
+        //      B --3----> E
+        //    /' \      1/' \9
+        //  /2    \ 1 /      \,
+        // A       'D        G
+        //  \5             7/'
+        //   \,           /
+        //     C --8---> F
+        //
+        //
+        MyGraph testDijkastras = new MyGraph(vertices, MyGraph.MyGraphType.DIRECTED);
+        testDijkastras.addWeightedEdge(a, b, 2);
+        testDijkastras.addWeightedEdge(a, c, 5);
+        testDijkastras.addWeightedEdge(b, e, 3);
+        testDijkastras.addWeightedEdge(b, d, 1);
+        testDijkastras.addWeightedEdge(c, f, 8);
+        testDijkastras.addWeightedEdge(d, e, 1);
+        testDijkastras.addWeightedEdge(e, g, 9);
+        testDijkastras.addWeightedEdge(f, g, 7);
+        testDijkastras.displayGraph();
+        testDijkastras.sssp();
+
     }
 }

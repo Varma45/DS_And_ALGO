@@ -62,8 +62,10 @@ public class MyGraph {
         for (Vertex v : vertices) {
             List<Edge> edgesOfV = edgesListMap.get(v.getName());
             sb.append("\nEdges With " + v.getName() + " : ");
-            for (Edge e : edgesOfV) {
-                sb.append("  "+e.toString());
+            if (null != edgesOfV) {
+                for (Edge e : edgesOfV) {
+                    sb.append("  "+e.toString());
+                }
             }
         }
         System.out.println(sb.toString());
@@ -72,12 +74,20 @@ public class MyGraph {
     public void sssp() {
         if (!isWeighted) {
             bfs();
-            System.out.println("Single Source Shortest Path from :" + vertices.get(0).getName());
-            for (Vertex v : vertices) {
-                System.out.print(v.getName() + " : ");
-                printSSSPath(v);
-                System.out.println();
-            }
+        } else {
+            dijkastras();
+            clear();
+            //bellmanFord();
+        }
+        traceRoute();
+    }
+
+    private void traceRoute() {
+        System.out.println("Single Source Shortest Path from :" + vertices.get(0).getName());
+        for (Vertex v : vertices) {
+            System.out.print(v.getName() + " : ");
+            printSSSPath(v);
+            System.out.println();
         }
     }
 
@@ -123,5 +133,35 @@ public class MyGraph {
         System.out.println(sb.toString());
     }
 
+    private void clear() {
+        for (Vertex v : vertices) {
+            v.setVisited(false);
+            v.setDistanceFromSource(Float.MAX_VALUE);
+        }
+    }
+
+    private void dijkastras() {
+        Vertex start = vertices.get(0);
+        start.setDistanceFromSource(0);
+        PriorityQueue<Vertex> dijkastrasQueue = new PriorityQueue<>();
+        for (Vertex v : vertices) {
+            dijkastrasQueue.add(v);
+        }
+        while(!dijkastrasQueue.isEmpty()) {
+            Vertex currentVertex = dijkastrasQueue.remove();
+            List<Edge> edgesWithCurrentVertex = edgesListMap.get(currentVertex.getName());
+            if (null == edgesWithCurrentVertex) continue;
+            for (Edge e : edgesWithCurrentVertex) {
+                Vertex destVertex = e.getDestination();
+                if (destVertex.getDistanceFromSource() >
+                        currentVertex.getDistanceFromSource() + e.getWeight()) {
+                    destVertex.setDistanceFromSource(currentVertex.getDistanceFromSource() + e.getWeight());
+                    destVertex.setPathVia(currentVertex);
+                    dijkastrasQueue.remove(destVertex);
+                    dijkastrasQueue.add(destVertex);
+                }
+            }
+        }
+    }
 
 }
