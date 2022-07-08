@@ -71,21 +71,23 @@ public class MyGraph {
         System.out.println(sb.toString());
     }
 
-    public void sssp() {
+    public void sssp() throws Exception{
         if (!isWeighted) {
             bfs();
+            traceRoute();
         } else {
             dijkastras();
+            traceRoute();
             clear();
-            //bellmanFord();
+            bellmanFord();
+
         }
-        traceRoute();
     }
 
     private void traceRoute() {
         System.out.println("Single Source Shortest Path from :" + vertices.get(0).getName());
         for (Vertex v : vertices) {
-            System.out.print(v.getName() + " : ");
+            System.out.print(v.getName() + " - " + v.getDistanceFromSource() + " : ");
             printSSSPath(v);
             System.out.println();
         }
@@ -137,6 +139,7 @@ public class MyGraph {
         for (Vertex v : vertices) {
             v.setVisited(false);
             v.setDistanceFromSource(Float.MAX_VALUE);
+            v.setPathVia(null);
         }
     }
 
@@ -162,6 +165,38 @@ public class MyGraph {
                 }
             }
         }
+    }
+
+    private void bellmanFord() throws Exception{
+        Vertex source = vertices.get(0);
+        source.setDistanceFromSource(0);
+        //v-1 for solution , v for detecting negative cycle.
+        for (int i = 0 ; i < vertices.size(); i ++) {
+            boolean isChanged = false;
+            for (Vertex v : vertices) {
+                List<Edge> edgeListWithSrcV = edgesListMap.get(v.getName());
+                if (null != edgeListWithSrcV) {
+                    for (Edge e : edgeListWithSrcV) {
+                        Float distanceFromSrc = e.getSource().getDistanceFromSource() + e.getWeight();
+                        if ( distanceFromSrc < e.getDestination().getDistanceFromSource()) {
+                            e.getDestination().setDistanceFromSource(distanceFromSrc);
+                            e.getDestination().setPathVia(e.getSource());
+                            isChanged = true;
+                        }
+                    }
+                }
+
+            }
+            if (!isChanged) {
+                System.out.println("No of iterations : " + (i+1));
+                break;
+            }
+            if (isChanged && i == (vertices.size()-1) ) {
+                throw new Exception("There is a negative cycle in the graph.");
+            }
+        }
+        System.out.println("----- Bellman Ford ----");
+        traceRoute();
     }
 
 }
