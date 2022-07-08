@@ -76,10 +76,11 @@ public class MyGraph {
             bfs();
             traceRoute();
         } else {
-            dijkastras();
-            traceRoute();
             clear();
             bellmanFord();
+            traceRoute();
+            clear();
+            dijkastras();
 
         }
     }
@@ -145,6 +146,7 @@ public class MyGraph {
 
     private void dijkastras() {
         Vertex start = vertices.get(0);
+        start.setPathVia(null);
         start.setDistanceFromSource(0);
         PriorityQueue<Vertex> dijkastrasQueue = new PriorityQueue<>();
         for (Vertex v : vertices) {
@@ -165,11 +167,13 @@ public class MyGraph {
                 }
             }
         }
+        System.out.println("-------- Dijkastras --------");
     }
 
     private void bellmanFord() throws Exception{
         Vertex source = vertices.get(0);
         source.setDistanceFromSource(0);
+        source.setPathVia(null);
         //v-1 for solution , v for detecting negative cycle.
         for (int i = 0 ; i < vertices.size(); i ++) {
             boolean isChanged = false;

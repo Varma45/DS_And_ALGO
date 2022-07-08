@@ -68,5 +68,49 @@ public class TestSSSP {
         testDijkastras.displayGraph();
         testDijkastras.sssp();
 
+        //Bellman Ford & Dijkastras -ve Weighted graph :
+        // A<----3----B ,
+        // |  '\     '|' \4
+        // |6    \-6  |1  \
+        //,|       \  |   / E
+        // C'----1--->D ,/2
+        //   <--- 2----
+
+        List<Vertex> negativeCycleTestVerticesList = new ArrayList<>();
+        negativeCycleTestVerticesList.add(e);
+        negativeCycleTestVerticesList.add(b);
+        negativeCycleTestVerticesList.add(c);
+        negativeCycleTestVerticesList.add(d);
+        negativeCycleTestVerticesList.add(a);
+        MyGraph testNegativeWeightGraph = new MyGraph(negativeCycleTestVerticesList, MyGraph.MyGraphType.DIRECTED);
+        testNegativeWeightGraph.addWeightedEdge(b, a, 3);
+        testNegativeWeightGraph.addWeightedEdge(a, c, 6);
+        testNegativeWeightGraph.addWeightedEdge(c, d, 1);
+        testNegativeWeightGraph.addWeightedEdge(d, c, 2);
+        testNegativeWeightGraph.addWeightedEdge(d, a, -6);
+        testNegativeWeightGraph.addWeightedEdge(d, b, 1);
+        testNegativeWeightGraph.addWeightedEdge(e, b, 4);
+        testNegativeWeightGraph.addWeightedEdge(e, d, 2);
+        testNegativeWeightGraph.displayGraph();
+        testNegativeWeightGraph.sssp();
+
+        //Dijkastras and Bellman Ford test -ve cycle Graph
+        // A<----3----B ,
+        // |  \      '|' \4
+        // |6    \-6  |1  \
+        //,|       \, |   / E
+        // C'----1--->D ,/2
+        //   <--- 2----
+        MyGraph testNegativeCycleGraph = new MyGraph(negativeCycleTestVerticesList, MyGraph.MyGraphType.DIRECTED);
+        testNegativeCycleGraph.addWeightedEdge(b, a, 3);
+        testNegativeCycleGraph.addWeightedEdge(a, c, 6);
+        testNegativeCycleGraph.addWeightedEdge(c, d, 1);
+        testNegativeCycleGraph.addWeightedEdge(d, c, 2);
+        testNegativeCycleGraph.addWeightedEdge(a, d, -6);
+        testNegativeCycleGraph.addWeightedEdge(d, b, 1);
+        testNegativeCycleGraph.addWeightedEdge(e, b, 4);
+        testNegativeCycleGraph.addWeightedEdge(e, d, 2);
+        testNegativeCycleGraph.displayGraph();
+        testNegativeCycleGraph.sssp();
     }
 }
